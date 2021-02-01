@@ -1,5 +1,6 @@
 import './styles.css';
-
+import articlesTpl from './templates/articles.hbs';
+console.log(articlesTpl);
 /* example with simple api */
 // const options = {
 //   method: 'GET',
@@ -20,3 +21,24 @@ import './styles.css';
 //   .then(data => console.log(data));
 
 /* example with news API */
+
+const refs = {
+  articlesContainer: document.querySelector('.js-articles'),
+};
+
+const myKey = 'fb416686c0cf4be5b520956836ebc075';
+const url = `https://newsapi.org/v2/everything?q=bitcoin&language=en&apiKey=${myKey}`;
+
+const options = { headers: { Authorization: myKey } };
+
+fetch(url, options)
+  .then(res => res.json())
+  .then(({ articles }) => {
+    console.log(articles);
+
+    const markup = articlesTpl(articles);
+
+    console.log(markup);
+    refs.articlesContainer.insertAdjacentHTML('beforeend', markup);
+  })
+  .catch(error => console.log(error));
