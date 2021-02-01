@@ -1,6 +1,6 @@
 import './styles.css';
 import articlesTpl from './templates/articles.hbs';
-console.log(articlesTpl);
+
 /* example with simple api */
 // const options = {
 //   method: 'GET',
@@ -24,21 +24,27 @@ console.log(articlesTpl);
 
 const refs = {
   articlesContainer: document.querySelector('.js-articles'),
+  searchForm: document.querySelector('.js-search-form'),
 };
 
-const myKey = 'fb416686c0cf4be5b520956836ebc075';
-const url = `https://newsapi.org/v2/everything?q=bitcoin&language=en&apiKey=${myKey}`;
+refs.searchForm.addEventListener('submit', event => {
+  event.preventDefault();
+  const form = event.currentTarget;
+  const inputValue = form.elements.query.value;
+  //   console.log(inputValue);
 
-const options = { headers: { Authorization: myKey } };
+  const myKey = 'fb416686c0cf4be5b520956836ebc075';
+  const url = `https://newsapi.org/v2/everything?q=${inputValue}&language=en&apiKey=${myKey}`;
 
-fetch(url, options)
-  .then(res => res.json())
-  .then(({ articles }) => {
-    console.log(articles);
+  const options = { headers: { Authorization: myKey } };
 
-    const markup = articlesTpl(articles);
+  refs.articlesContainer.innerHTML = '';
 
-    console.log(markup);
-    refs.articlesContainer.insertAdjacentHTML('beforeend', markup);
-  })
-  .catch(error => console.log(error));
+  fetch(url, options)
+    .then(res => res.json())
+    .then(({ articles }) => {
+      const markup = articlesTpl(articles);
+      refs.articlesContainer.insertAdjacentHTML('beforeend', markup);
+    })
+    .catch(error => console.log(error));
+});
