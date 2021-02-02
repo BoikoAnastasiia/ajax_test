@@ -1,6 +1,10 @@
 import './styles.css';
-import fetchArticles from './js/fetch-articles.js';
+import newsService from './js/news_service';
 import renderMurkup from './js/updateMarkup';
+
+// fetch('http://hn.algolia.com/api/v1/search?query=react&tags=story')
+//   .then(rs => rs.json())
+//   .then(data => console.log(data));
 
 /* example with simple api */
 // const options = {
@@ -46,22 +50,29 @@ import renderMurkup from './js/updateMarkup';
 // });
 
 /*  refactoring the function */
+
 const refs = {
   articlesContainer: document.querySelector('.js-articles'),
   searchForm: document.querySelector('.js-search-form'),
+  loadMoreBtn: document.querySelector('[data-action="load-more"]'),
 };
 
 refs.searchForm.addEventListener('submit', event => {
   event.preventDefault();
   const form = event.currentTarget;
-  const inputValue = form.elements.query.value;
+  newsService.query = form.elements.query.value;
 
   refs.articlesContainer.innerHTML = '';
 
   form.reset();
-  fetchArticles(inputValue).then(renderMurkup);
+
+  newsService.resetPage();
+
+  newsService.fetchArticles().then(renderMurkup);
 });
 
-fetch('http://hn.algolia.com/api/v1/search?query=react&tags=story')
-  .then(rs => rs.json())
-  .then(data => console.log(data));
+/* adding load more btn bad option */
+
+refs.loadMoreBtn.addEventListener('click', () => {
+  newsService.fetchArticles().then(renderMurkup);
+});
