@@ -18,6 +18,11 @@ refs.searchForm.addEventListener('submit', event => {
 
   newsService.resetPage();
   refs.loadMoreBtn.classList.add('is-hidden');
+
+  /* adding spinner */
+  refs.spin.classList.remove('sr-only');
+
+  /*  http respond */
   newsService.fetchArticles().then(renderMurkup);
   refs.loadMoreBtn.classList.remove('is-hidden');
   form.reset();
