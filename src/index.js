@@ -23,11 +23,26 @@ refs.searchForm.addEventListener('submit', event => {
   refs.spin.classList.remove('sr-only');
 
   /*  http respond */
-  newsService.fetchArticles().then(renderMurkup);
-  refs.loadMoreBtn.classList.remove('is-hidden');
+  newsService
+    .fetchArticles()
+    .then(articles => {
+      renderMurkup(articles);
+      refs.loadMoreBtn.classList.remove('is-hidden');
+    })
+    .finally(() => refs.spin.classList.add('sr-only'));
+
   form.reset();
 });
 
 refs.loadMoreBtn.addEventListener('click', () => {
-  newsService.fetchArticles().then(renderMurkup);
+  refs.loadMoreBtn.classList.add('is-hidden');
+  refs.spin.classList.remove('sr-only');
+
+  newsService
+    .fetchArticles()
+    .then(articles => {
+      renderMurkup(articles);
+      refs.loadMoreBtn.classList.remove('is-hidden');
+    })
+    .finally(() => refs.spin.classList.add('sr-only'));
 });
