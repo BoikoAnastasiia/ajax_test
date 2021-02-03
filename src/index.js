@@ -17,32 +17,26 @@ refs.searchForm.addEventListener('submit', event => {
   refs.articlesContainer.innerHTML = '';
 
   newsService.resetPage();
-  refs.loadMoreBtn.classList.add('is-hidden');
-
-  /* adding spinner */
-  refs.spin.classList.remove('sr-only');
-
-  /*  http respond */
-  newsService
-    .fetchArticles()
-    .then(articles => {
-      renderMurkup(articles);
-      refs.loadMoreBtn.classList.remove('is-hidden');
-    })
-    .finally(() => refs.spin.classList.add('sr-only'));
-
+  fetchArticles();
   form.reset();
 });
 
-refs.loadMoreBtn.addEventListener('click', () => {
+refs.loadMoreBtn.addEventListener('click', fetchArticles);
+
+function fetchArticles() {
   refs.loadMoreBtn.classList.add('is-hidden');
   refs.spin.classList.remove('sr-only');
-
   newsService
     .fetchArticles()
     .then(articles => {
       renderMurkup(articles);
       refs.loadMoreBtn.classList.remove('is-hidden');
+
+      window.scrollTo({
+        top: 1000000000,
+
+        behavior: 'smooth',
+      });
     })
     .finally(() => refs.spin.classList.add('sr-only'));
-});
+}
