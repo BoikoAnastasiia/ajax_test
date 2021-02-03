@@ -64,11 +64,10 @@ refs.searchForm.addEventListener('submit', event => {
 
   refs.articlesContainer.innerHTML = '';
 
-  form.reset();
-
   newsService.resetPage();
 
   newsService.fetchArticles().then(renderMurkup);
+  form.reset();
 });
 
 /* adding load more btn bad option */
